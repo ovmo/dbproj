@@ -1,17 +1,15 @@
-
 from pathlib import Path
 from app import *
 from app import db
 import enum
-import datetime
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Table, Column, Integer, ForeignKey
+from sqlalchemy import Table, Column, Integer, ForeignKey, null
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 
 Path("db").mkdir(parents=True, exist_ok=True)
-# app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:otto@localhost:3306"
 
 
 class Address(db.Model):
@@ -81,8 +79,13 @@ def save_new_pizza(name, toppings):
     for i in range(1, len(toppings)):
         # topping = find_single_topping(toppings.toppings_name)
         topping = find_single_topping(toppings[i])
+        if topping is None:
+            return Exception(DatabaseError)
         new_pizza_topping = Pizza_Toppings(pizza_id=new_pizza.id, toppings_id=topping.id)
         db.session.add(new_pizza_topping)
+        db.session.commit()
+        # create topping Pizza link
+
     new_menu_item = Menu(pizza_id=new_pizza.id)
     db.session.add(new_menu_item)
     db.session.commit()
@@ -103,7 +106,7 @@ class Toppings(db.Model):
     db.__tablename__ = 'toppings'
     toppings_id = db.Column(db.Integer, primary_key=True)
     toppings_name = db.Column(db.String(40),nullable=False)
-    toppings_price = db.Column(db.Integer, nullable=False)
+    toppings_price = db.Column(db.Float, nullable=False)
     toppings_vegi = db.Column(db.Boolean)
     pizza = relationship("Pizza", back_populates="toppings", secondary=Pizza_Toppings)
 
@@ -133,7 +136,7 @@ class Drinks(db.Model):
 
 
 def save_new_drinks(name,price):
-    new_drinks = Drinks(drinks_name= name,drinks_price=price)
+    new_drinks = Drinks(drinks_name=name, drinks_price=price)
     new_menu_item = Menu(drinks_id=new_drinks.id)
     db.session.add(new_menu_item)
     db.session.add(new_drinks)
@@ -193,6 +196,8 @@ class Order_Delivery(db.Model):
     db.__tablename__='order_delivery'
     order_id = db.Column(db.Integer, db.ForeignKey('order.order_id'))
     delivery_driver_id = db.Column(db.Integer, db.ForeignKey('delivery_driver.delivery_driver_id'))
+    delivery_driver = db.relationship('delivery_driver', backref=db.backref('order_delivery', lazy=True))
+    order = db.relationship('order', backref=db.backref('order_delivery', lazy=True))
 
 
 class Menu(db.Model):
@@ -201,6 +206,9 @@ class Menu(db.Model):
     pizza_id = db.Column(db.Integer, db.ForeignKey('pizza.pizza_id'),nullable=False)
     drinks_id = db.Column(db.Integer, db.ForeignKey('drinks.drinks_id'),nullable=False)
     dessert_id = db.Column(db.Integer, db.ForeignKey('dessert.dessert_id'),nullable=False)
+    pizza = db.relationship('Pizza', backref=db.backref('menu', lazy=True))
+    drinks = db.relationship('Drinks', backref=db.backref('menu', lazy=True))
+    dessert = db.relationship('Dessert', backref=db.backref('menu', lazy=True))
 
 
 def find_single_menu(**kwargs):
@@ -216,9 +224,11 @@ class Order (db.Model):
     db.__tablename__ = 'order'
     order_id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.Enum(OrderEnum), nullable=False)
-    placed = db.Column(db.DateTime, nullable=False)
+    placed = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     discount = db.Column(db.Boolean)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    customer = db.relationship('Customer', backref=db.backref('order', lazy=True))
+
 
     def __repr__(self):
         return f"Order {self.order_id}, came in at {self.placed}, currently {self.status}, " \
@@ -231,12 +241,16 @@ def find_single_order(**kwargs):
 
 def save_new_order(email, menu, discount):
     customer = find_single_customer(email)
-    new_order = Order(email=email, discount=discount, customer_id=customer.id, placed=datetime.datetime.now())
+    if customer is None:
+        return redirect('/customer.html')
+
+    new_order = Order(email=email, discount=discount, customer_id=customer.id, placed=datetime.utcnow)
     db.session.add(new_order)
     for i in range(1,len(menu)):
         menu_item = find_single_menu(menu[i])
         new_order_menu = Order_Menu(order_id=new_order.id, menu_id=menu_item.id)
         db.session.add(new_order_menu)
+
     db.session.commit()
     return new_order
 
@@ -245,6 +259,8 @@ class Order_Menu(db.Model):
     db.__tablename__='order_menu'
     menu_id = db.Column(db.Integer, db.ForeignKey('menu.menu_id'),nullable=False)
     order_id = db.Column(db.Integer, db.ForeignKey('order.order_id'),nullable=False)
+    order = db.relationship('Order', backref=db.backref('order_menu', lazy=True))
+    menu = db.relationship('Menu', backref=db.backref('order_menu', lazy=True))
 
 
 db.create_all()
