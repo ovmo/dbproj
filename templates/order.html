@@ -1,0 +1,92 @@
+{% extends "skeleton.html" %}
+
+{%  %}
+{% block content %}
+<div class="col-12">
+    <div class="mx-auto" style="width: 300px;">
+        <h1>Order with Pizzeria DKE</h1>
+    </div>
+    <hr>
+    <div class="row">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="col-4">
+            {{ form.email.label }}
+            <br>
+            <p class="">
+                Please enter your email so you can get nice rewards. and we know where to order it to
+            </p>
+        </div>
+        <div class="col-8">
+            {{ form.email(size=120) }}
+        </div>
+        <div class="col-4">
+            {{ }}
+        </div>
+        <div class="col-4">
+            {{ form.street(size=120) }}
+        </div>
+        <div class="col-2">
+            {{ form.street_no.label }}
+        </div>
+        <div class="col-2">
+            {{ form.street_no(size=5) }}
+        </div>
+        <div class="col-2">
+            {{ form.street_no(size=5) }}
+        </div>
+        <div class="col-2">
+            {{ form.area_code.label }}
+        </div>
+        <div class="col-2">
+            {{ form.area_code(size=7) }}
+        </div>
+        <div class="col-4">
+            {{ form.city.label }}
+        </div>
+        <div class="col-4">
+            {{ form.city(size=40) }}
+        </div>
+    </form>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+Create Order
+
+
+{#"""
+{#pizza_magarita
+{#pizza_caprese
+{#pizza_buratina
+{#pizza_fungi
+{#pizza_parma
+{#pizza_prosciutto
+{#pizza_pepperoni
+{#pizza_diavola
+{#pizza_salami
+{#pizza_romana
+{#pizza_napoli
+{#pizza_marinara
+{#pizza_crudo
+{#pizza_tricolore
+{
+{#water
+{#coke
+{#apple
+{#orange
+{#white_wine
+{#red_wine
+{#limoncello
+{#espresso
+{#cappuccino
+{
+{#tiramisu
+{#pana_cotta
+{#tartufo
+{#"""#}
