@@ -38,8 +38,8 @@
   </div>
 </nav>
     <div class="container">
-        <div class="col-12">
-
+        <div class="row">
+            <div class="col-12">
             {# Code Goes Here inb each page...         #}
             {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -51,6 +51,7 @@
             {% endif %}
             {% endwith %}
             {% block content %}{% endblock %}
+            </div>
         </div>
     </div>
     <!-- Keep this at the end of the file so the stuff can get displayed -->

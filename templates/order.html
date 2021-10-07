@@ -1,3 +1,81 @@
+{% extends "skeleton.html" %}
+
+{% from model.mysql_model import * %}
+{% block content %}
+<div class="col-12">
+    <div class="mx-auto" style="width: 300px;">
+        <h1>Order with Pizzeria DKE</h1>
+    </div>
+    <hr>
+    <div class="row">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="col-4">
+            {{ form.email.label }}
+            <br>
+            <p class="font-weight-lighter">
+                Please enter your email so you can get nice rewards. and we know where to order it to.
+            </p>
+        </div>
+        <div class="col-8">
+            {{ form.email(size=120) }}
+        </div>
+
+            {% for item in form.menu_field_list %}
+                <div class="col-4">
+                    <p class="font-weight-bold">
+                        {{ item.label }}
+                        {% pizza = model.mysql_model.find_single_pizza(name=item.label %} }
+                    </p>
+{#                    <br>#}
+                    <div class="mx-auto" style="width: 50px;">
+                        {{ item }}
+                    </div>
+                </div>
+
+                <div class="card col-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.label}}</h5>
+                        {% mysql_model. %} }
+                        <p class="card-text">{% mysql_model.find_single_pizza %}</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+
+            {% endfor %}
+        <div class="col-4">
+            {{ form.street(size=120) }}
+        </div>
+        <div class="col-2">
+            {{ form.street_no.label }}
+        </div>
+        <div class="col-2">
+            {{ form.street_no(size=5) }}
+        </div>
+        <div class="col-2">
+            {{ form.street_no(size=5) }}
+        </div>
+        <div class="col-2">
+            {{ form.area_code.label }}
+        </div>
+        <div class="col-2">
+            {{ form.area_code(size=7) }}
+        </div>
+        <div class="col-4">
+            {{ form.city.label }}
+        </div>
+        <div class="col-4">
+            {{ form.city(size=40) }}
+        </div>
+    </form>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+
 
 Create Order
 

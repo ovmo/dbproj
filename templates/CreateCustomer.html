@@ -1,47 +1,63 @@
 {% extends "skeleton.html" %}
+{% from FormCustomer import CustomerCreation %}
 
+{% block content %}
 <div class="col-12">
     <div class="mx-auto" style="width: 300px;">
         <h1>Sign Up to Pizzeria DKE</h1>
     </div>
     <hr>
-    <div class="">
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <div class="col-4">
-            {{ form.email.label }}
-        </div>
-        <div class="col-8">
-            {{ form.email(size=120) }}
-        </div>
-        <div class="col-4">
-            {{ form.street.label }}
-        </div>
-        <div class="col-4">
-            {{ form.street(size=120) }}
-        </div>
-        <div class="col-2">
-            {{ form.street_no.label }}
-        </div>
-        <div class="col-2">
-            {{ form.street_no(size=5) }}
-        </div>
-        <div class="col-2">
-            {{ form.street_no(size=5) }}
-        </div>
-        <div class="col-2">
-            {{ form.area_code.label }}
-        </div>
-        <div class="col-2">
-            {{ form.area_code(size=7) }}
-        </div>
-        <div class="col-4">
-            {{ form.city.label }}
-        </div>
-        <div class="col-4">
-            {{ form.city(size=40) }}
-        </div>
-    </form>
-
+    <div class="row">
+        <form action="/" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-4">
+                    {{ form.email.label }}
+                </div>
+                <div class="col-8">
+                    {{ form.email(size=120) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    {{ form.street.label }}
+                </div>
+                <div class="col-4">
+                    {{ form.street(size=120) }}
+                </div>
+                <div class="col-2">
+                    {{ form.street_no.label }}
+                </div>
+                <div class="col-2">
+                    {{ form.street_no(size=5) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    {{ form.street_no(size=5) }}
+                </div>
+                <div class="col-2">
+                    {{ form.area_code.label }}
+                </div>
+                <div class="col-2">
+                    {{ form.area_code(size=7) }}
+                </div>
+                <div class="col-4">
+                    {{ form.city.label }}
+                </div>
+                <div class="col-4">
+                    {{ form.city(size=40) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="mx-auto" style="width: 200px;">
+                        {{ form.submit }}
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+
+{% endblock %}

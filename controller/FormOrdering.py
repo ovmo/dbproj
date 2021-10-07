@@ -3,7 +3,8 @@ from wtforms import StringField, SubmitField, IntegerField
 from wtforms.validators import DataRequired
 
 
-class CustomerCreation(FlaskForm):
+class OrderCreation(FlaskForm):
+    menu_field_list = []
     email = StringField('Email', validators=[DataRequired()])
     pizza_magarita = IntegerField("Margarita", default=0)
     pizza_buratina = IntegerField("Buratina", default=0)
@@ -30,6 +31,31 @@ class CustomerCreation(FlaskForm):
     tiramisu = IntegerField("Tiramisu", default=0)
     pana_cotta = IntegerField("Pana Cotta", default=0)
     tartufo = IntegerField("Tartufo", default=0)
+    menu_field_list.append(pizza_magarita)
+    menu_field_list.append(pizza_buratina)
+    menu_field_list.append(pizza_fungi)
+    menu_field_list.append(pizza_parma)
+    menu_field_list.append(pizza_prosciutto)
+    menu_field_list.append(pizza_pepperoni)
+    menu_field_list.append(pizza_diavola)
+    menu_field_list.append(pizza_salami)
+    menu_field_list.append(pizza_romana)
+    menu_field_list.append(pizza_napoli)
+    menu_field_list.append(pizza_marinara)
+    menu_field_list.append(pizza_crudo)
+    menu_field_list.append(pizza_tricolore)
+    menu_field_list.append(water)
+    menu_field_list.append(coke)
+    menu_field_list.append(apple)
+    menu_field_list.append(orange)
+    menu_field_list.append(white_wine)
+    menu_field_list.append(red_wine)
+    menu_field_list.append(limoncello)
+    menu_field_list.append(espresso)
+    menu_field_list.append(cappuccino)
+    menu_field_list.append(tiramisu)
+    menu_field_list.append(pana_cotta)
+    menu_field_list.append(tartufo)
     submit = SubmitField('Sign Up')
 
 

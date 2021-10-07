@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import DatabaseError
-from flask_migrate import Migrate
 
 
 # from models.User import db
@@ -23,7 +22,7 @@ def index():
     # else customer creation (no customer retention rate)
     # after -> ordering
     # 1) customerSignIn()
-    return redirect('/order')
+    return render_template("index.html")
 
 
 @app.route('/order', methods=['POST'])
@@ -45,9 +44,9 @@ def special_exception_handler(error):
 
 
 db.init_app(app)
-migrate = Migrate(app, db)
 
 
 if __name__ == '__main__':
     app.debug = True
+    app.run(debug=True, use_debugger=False, use_reloader=False)
     app.run()
