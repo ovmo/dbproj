@@ -1,15 +1,15 @@
-from app import db
-from model.mysql_model import Delivery_Driver
+from db import db
+from model.mysql_model import DeliveryDriver
 
 
-def save_new_delivery_driver(name,area):
-    new_delivery_driver = Delivery_Driver(delivery_driver_name=name, delivery_driver_area = area)
+def save_new_delivery_driver(name, area):
+    new_delivery_driver = DeliveryDriver(delivery_driver_name=name, delivery_driver_area = area)
     db.session.add(new_delivery_driver)
     db.session.commit()
     return new_delivery_driver
 
 
 def find_single_driver(**kwargs):
-    return Delivery_Driver.query.filter_by(**kwargs).first()
+    return DeliveryDriver.query.filter_by(**kwargs).first()
 
 

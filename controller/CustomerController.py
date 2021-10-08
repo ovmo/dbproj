@@ -1,6 +1,6 @@
-import sys
-from flask import render_template, redirect, url_for, request, render_template, request, redirect, session
-from app import db
+# import sys
+# from flask import render_template, redirect, url_for, request, render_template, request, redirect, session
+from db import db
 from model.mysql_model import Address, Customer
 
 

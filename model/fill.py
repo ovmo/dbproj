@@ -3,7 +3,7 @@
 #import app
 
 #add toppings
-from app import db
+from db import db
 from controller.ControllerMenu import save_new_toppings, save_new_pizza, save_new_drinks, save_new_desserts
 from controller.DriverController import save_new_delivery_driver
 
@@ -30,6 +30,26 @@ oregano = save_new_toppings(name="Oregano", price=0.50, vegi=True)
 parmesan = save_new_toppings(name="Parmesan", price=0.50, vegi=True)
 
 db.session.add(sauce)
+db.session.add(cheese)
+db.session.add(mozzarella)
+db.session.add(buratta)
+db.session.add(tomatoes)
+db.session.add(mushrooms)
+db.session.add(parma)
+db.session.add(prosciutto)
+db.session.add(salami)
+db.session.add(chicken)
+db.session.add(bresaola)
+db.session.add(pepperoni)
+db.session.add(arugula)
+db.session.add(basil)
+db.session.add(anchovy)
+db.session.add(tuna)
+db.session.add(olives)
+db.session.add(capers)
+db.session.add(garlic)
+db.session.add(oregano)
+db.session.add(parmesan)
 db.session.commit()
 
 #creating the Pizzas

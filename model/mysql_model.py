@@ -1,11 +1,11 @@
 from pathlib import Path
-from app import db
+from db import db
 import enum
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Table, Column, Integer, ForeignKey, null
+# from flask_sqlalchemy import SQLAlchemy
+# from sqlalchemy import Table, Column, Integer, ForeignKey, null
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base
 
 Path("db").mkdir(parents=True, exist_ok=True)
 
@@ -83,7 +83,7 @@ class Toppings(db.Model):
     toppings_name = db.Column(db.String(40),nullable=False)
     toppings_price = db.Column(db.Float, nullable=False)
     toppings_vegi = db.Column(db.Boolean)
-    pizza = relationship("Pizza", back_populates="toppings", secondary=Pizza_Toppings)
+    pizza = relationship("Pizza", back_populates="toppings", secondary=pizza_to_toppings)
 
     def __repr__(self):
         return f"Toppings:{self.toppings_name}, Price:{self.toppings_price}, Vegi?{self.toppings_vegi}"
@@ -109,8 +109,13 @@ class Dessert(db.Model):
         return f"Dessert:{self.dessert_name},Price:{self.dessert_price}"
 
 
-class Delivery_Driver(db.Model):
-    db.__tablename__='delivery_driver'
+driver_to_order_table = db.Table('driver_to_order',
+                                 db.Column('order_id', db.Integer, db.ForeignKey('order.order_id'), primary_key=True),
+                                 db.Column('driver_id', db.Integer, db.ForeignKey('delivery_driver.delivery_driver_id'),))
+
+
+class DeliveryDriver(db.Model):
+    db.__tablename__ = 'delivery_driver'
     delivery_driver_id = db.Column(db.Integer, primary_key=True)
     delivery_driver_name = db.Column(db.String(20), nullable=False)
     delivery_driver_area = db.Column(db.Integer, nullable=False)
@@ -118,11 +123,6 @@ class Delivery_Driver(db.Model):
     def __repr__(self):
         return f"Delivery driver name{self.delivery_driver_name}, delivered in this area{self.delivery_driver_area}"
 
-
-driver_to_order_table = db.Table('driver_to_order',
-                                 db.Column('order_id', db.Integer, db.ForeignKey('order.order_id'), primary_key=True),
-                                 db.Column('driver_id', db.Integer, db.ForeignKey('delivery_driver.delivery_driver_id'),
-                                           primary_key=True))
 
 # class Order_Delivery(db.Model):
 #     db.__tablename__='order_delivery'
@@ -133,7 +133,7 @@ driver_to_order_table = db.Table('driver_to_order',
 
 
 class Menu(db.Model):
-    db.__tablename__='menu'
+    db.__tablename__ = 'menu'
     menu_id = db.Column(db.Integer, primary_key=True)
     pizza_id = db.Column(db.Integer, db.ForeignKey('pizza.pizza_id'))
     drinks_id = db.Column(db.Integer, db.ForeignKey('drinks.drinks_id'))
@@ -165,7 +165,8 @@ class Order (db.Model):
 
 order_to_menu_table = db.Table('menu_to_order',
                                db.Column('order_id', db.Integer, db.ForeignKey('order.order_id')),
-                               db.Column('menu_id', db.Integer, db.ForeignKey('menu.menu_id')))
+                               db.Column('menu_id', db.Integer, db.ForeignKey('menu.menu_id')),
+                               db.Column('count', db.Integer, default=1))
 # class Order_Menu(db.Model):
 #     db.__tablename__='order_menu'
 #     menu_id = db.Column(db.Integer, db.ForeignKey('menu.menu_id'),nullable=False)
@@ -174,5 +175,5 @@ order_to_menu_table = db.Table('menu_to_order',
 #     menu = db.relationship('Menu', backref=db.backref('order_menu', lazy=True))
 
 
-# db.drop_all()
+db.drop_all()
 db.create_all()

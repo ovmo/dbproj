@@ -1,9 +1,10 @@
-import sys
+# import sys
 from flask import render_template, redirect, url_for, request, render_template, request, redirect, session
-from app import page_not_found, pizza_missing, db
-from FormOrdering import OrderCreation
-from flask_sqlalchemy import SQLAlchemy
-from ControllerMenu import find_single_menu
+# from app import page_not_found, pizza_missing, db
+# from FormOrdering import OrderCreation
+# from flask_sqlalchemy import SQLAlchemy
+# from ControllerMenu import find_single_menu
+from controller.ControllerMenu import find_single_menu
 from controller.CustomerController import find_single_customer
 from model.mysql_model import Order
 
@@ -19,10 +20,11 @@ def save_new_order(email, menu, discount):
     else:
         order_menu = []
         pizza_ordered = False
-        for i in range(1,len(menu)):
+        for i in range(1, len(menu)):
             menu_item = find_single_menu(menu_id=menu[i])
             if menu_item is None:
-                return page_not_found(Exception)
+                return f"{menu[i]} Item not in the Menu"
+                # return page_not_found(Exception)
             else:
                 if menu_item.pizza is not None:
                     pizza_ordered = True

@@ -1,6 +1,7 @@
 from sqlalchemy.exc import DatabaseError
 
-from app import db, page_not_found
+# from app import page_not_found
+from db import db
 from model.mysql_model import Pizza, Menu, Drinks, Dessert, Toppings
 
 
@@ -14,7 +15,8 @@ def save_new_pizza(name, toppings):
         # topping = find_single_topping(toppings.toppings_name)
         topping = find_single_topping(name=toppings[i])
         if topping is None:
-            return page_not_found(DatabaseError)
+            return "Topping non existent"
+            # return page_not_found(DatabaseError)
         else:
             pizza_toppings.append(topping)
     new_pizza = Pizza(name=name, toppings=pizza_toppings)
@@ -48,7 +50,10 @@ def find_single_topping(**kwargs):
 
 def find_all_toppings(**kwargs):
     pizza = find_single_pizza(**kwargs)
-    return Pizza.query.filter(Pizza.query.all())
+    return Pizza.query.join(Pizza.toppings).filter_by(pizza_id=pizza.id).all()
+
+def get_pizza_price(**kwargs):
+    pizza = find_single_pizza(**kwargs)
 
 
 def save_new_drinks(name,price):

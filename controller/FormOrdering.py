@@ -4,8 +4,8 @@ from wtforms.validators import DataRequired
 
 
 class OrderCreation(FlaskForm):
-    menu_field_list = []
     email = StringField('Email', validators=[DataRequired()])
+
     pizza_magarita = IntegerField("Margarita", default=0)
     pizza_buratina = IntegerField("Buratina", default=0)
     pizza_fungi = IntegerField("Fungi", default=0)
@@ -31,33 +31,40 @@ class OrderCreation(FlaskForm):
     tiramisu = IntegerField("Tiramisu", default=0)
     pana_cotta = IntegerField("Pana Cotta", default=0)
     tartufo = IntegerField("Tartufo", default=0)
-    menu_field_list.append(pizza_magarita)
-    menu_field_list.append(pizza_buratina)
-    menu_field_list.append(pizza_fungi)
-    menu_field_list.append(pizza_parma)
-    menu_field_list.append(pizza_prosciutto)
-    menu_field_list.append(pizza_pepperoni)
-    menu_field_list.append(pizza_diavola)
-    menu_field_list.append(pizza_salami)
-    menu_field_list.append(pizza_romana)
-    menu_field_list.append(pizza_napoli)
-    menu_field_list.append(pizza_marinara)
-    menu_field_list.append(pizza_crudo)
-    menu_field_list.append(pizza_tricolore)
-    menu_field_list.append(water)
-    menu_field_list.append(coke)
-    menu_field_list.append(apple)
-    menu_field_list.append(orange)
-    menu_field_list.append(white_wine)
-    menu_field_list.append(red_wine)
-    menu_field_list.append(limoncello)
-    menu_field_list.append(espresso)
-    menu_field_list.append(cappuccino)
-    menu_field_list.append(tiramisu)
-    menu_field_list.append(pana_cotta)
-    menu_field_list.append(tartufo)
-    submit = SubmitField('Sign Up')
 
+    pizza_field_list = []
+    drink_field_list = []
+    dessert_field_list = []
+
+    pizza_field_list.append(pizza_magarita)
+    pizza_field_list.append(pizza_buratina)
+    pizza_field_list.append(pizza_fungi)
+    pizza_field_list.append(pizza_parma)
+    pizza_field_list.append(pizza_prosciutto)
+    pizza_field_list.append(pizza_pepperoni)
+    pizza_field_list.append(pizza_diavola)
+    pizza_field_list.append(pizza_salami)
+    pizza_field_list.append(pizza_romana)
+    pizza_field_list.append(pizza_napoli)
+    pizza_field_list.append(pizza_marinara)
+    pizza_field_list.append(pizza_crudo)
+    pizza_field_list.append(pizza_tricolore)
+
+    drink_field_list.append(water)
+    drink_field_list.append(coke)
+    drink_field_list.append(apple)
+    drink_field_list.append(orange)
+    drink_field_list.append(white_wine)
+    drink_field_list.append(red_wine)
+    drink_field_list.append(limoncello)
+    drink_field_list.append(espresso)
+    drink_field_list.append(cappuccino)
+
+    dessert_field_list.append(tiramisu)
+    dessert_field_list.append(pana_cotta)
+    dessert_field_list.append(tartufo)
+
+    submit = SubmitField('Order Now')
 
 """
 pizza_magarita 
