@@ -1,8 +1,12 @@
 
-from mysql_model import *
+#from mysql_model import *
 #import app
 
 #add toppings
+from app import db
+from controller.ControllerMenu import save_new_toppings, save_new_pizza, save_new_drinks, save_new_desserts
+from controller.DriverController import save_new_delivery_driver
+
 sauce = save_new_toppings(name="Sauce", price=1.00, vegi=True)
 cheese = save_new_toppings(name="Cheese", price=1.00, vegi=True)
 mozzarella = save_new_toppings(name="Mozzarella", price=1.50, vegi=True)

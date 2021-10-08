@@ -1,39 +1,36 @@
 import sys
-from flask import render_template, redirect, url_for, request, abortFlask, render_template, request, redirect, session
-from app import *
-import model.mysql_model
-from model.mysql_model import *
-from FormCustomer import CustomerCreation
-from manage import *
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from flask import render_template, redirect, url_for, request, render_template, request, redirect, session
+from app import db
+from model.mysql_model import Address, Customer
 
 
-@app.route('/customer', methods=['GET', 'POST'])
-def customer():
-    if request.method == "POST":
-        customer = save_new_costumer(email = request.form['email'],
-                                     street = request.form['street'],
-                                     street_no = request.form['street_no'],
-                                     code = request.form['postal_code'],
-                                     city = request.form['city']
-                                     )
-        return redirect('/order')
+def find_single_address(**kwargs):
+    return Address.query.filter_by(**kwargs).first()
+
+
+def save_new_address(street, street_no, code, city):
+    new_address = Address(street=street, street_no=street_no, code=code, city=city)
+    db.session.add(new_address)
+    db.session.commit()
+    return new_address
+
+
+def find_single_customer(**kwargs):
+    return Customer.query.filter_by(**kwargs).first()
+
+
+def save_new_costumer(email, street, street_no, code, city):
+    new_address = save_new_address(street, street_no, code, city)
+    new_customer = Customer(email=email, address=new_address)
+    if new_customer.email != "":
+        db.session.add(new_customer)
+        db.session.commit()
+        return new_customer
     else:
+        return AttributeError
 
-        return render_template("CreateCustomer.html", form=CustomerCreation)
 
-@app.route('/customer/<int:customer_id>', methods=['GET'])
-def customer_id(customer_id):
-    if request.method == 'GET':
-        customerFound = find_single_customer(customer_id=customer_id)
-        if customerFound is None:
-            return redirect(page_not_found(DatabaseError))
-        else:
-            return render_template('CustomerID.html', customer=customerFound)
-    else:
-        return redirect(page_not_found(PermissionError))
-        #404
+
+
 
 

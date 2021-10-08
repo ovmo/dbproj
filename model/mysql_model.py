@@ -1,5 +1,4 @@
 from pathlib import Path
-from app import *
 from app import db
 import enum
 from datetime import datetime
@@ -7,7 +6,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, ForeignKey, null
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-
 
 Path("db").mkdir(parents=True, exist_ok=True)
 
@@ -25,17 +23,6 @@ class Address(db.Model):
         return f"Address {self.street} {self.street_no}, {self.code} {self.city}"
 
 
-def find_single_address(**kwargs):
-    return Address.query.filter_by(**kwargs).first()
-
-
-def save_new_address(street, street_no, code, city):
-    new_address = Address(street=street, street_no=street_no, code=code, city=city)
-    db.session.add(new_address)
-    db.session.commit()
-    return new_address
-
-
 class Customer(db.Model):
     db.__tablename__ = 'customer'
     customer_id = db.Column(db.Integer, primary_key=True)
@@ -46,22 +33,6 @@ class Customer(db.Model):
 
     def __repr__(self):
         return f"User {self.email}"
-
-
-def find_single_customer(**kwargs):
-    return Customer.query.filter_by(**kwargs).first()
-
-
-def save_new_costumer(email, street, street_no, code, city):
-    new_address = save_new_address(street, street_no, code, city)
-    new_customer = Customer(email=email, address_id=new_address.address_id)
-
-    if new_customer.email != "":
-        db.session.add(new_customer)
-        db.session.commit()
-        return new_customer
-    else:
-        return AttributeError
 
 
 pizza_to_toppings = db.Table('pizzas_to_toppings',
@@ -78,36 +49,33 @@ class Pizza(db.Model):
 
     def __repr__(self):
         return f"Pizza {self.pizza_name}, Toppings: {self.toppings}"
+#
+#
+# def save_new_pizza(name, toppings):
+#     new_pizza = Pizza(name=name)
+#     db.session.add(new_pizza)
+#     for i in range(1, len(toppings)):
+#         # topping = find_single_topping(toppings.toppings_name)
+#         topping = find_single_topping(name=toppings[i])
+#         if topping is None:
+#             return Exception(DatabaseError)
+#         # new_pizza_topping = Pizza_Toppings(pizza_id=new_pizza.id, toppings_id=topping.id)
+#         # db.session.add(new_pizza_topping)
+#         db.session.commit()
+#         # create topping Pizza link
+#
+#     new_menu_item = Menu(pizza_id=new_pizza.id)
+#     db.session.add(new_menu_item)
+#     db.session.commit()
+#     return new_pizza
 
-
-def save_new_pizza(name, toppings):
-    new_pizza = Pizza(name=name)
-    db.session.add(new_pizza)
-    for i in range(1, len(toppings)):
-        # topping = find_single_topping(toppings.toppings_name)
-        topping = find_single_topping(name=toppings[i])
-        if topping is None:
-            return Exception(DatabaseError)
-        # new_pizza_topping = Pizza_Toppings(pizza_id=new_pizza.id, toppings_id=topping.id)
-        # db.session.add(new_pizza_topping)
-        db.session.commit()
-        # create topping Pizza link
-
-    new_menu_item = Menu(pizza_id=new_pizza.id)
-    db.session.add(new_menu_item)
-    db.session.commit()
-    return new_pizza
-
-
-def find_single_pizza(**kwargs):
-    return Pizza.query.filter_by(**kwargs).first()
 
 
 # class Pizza_Toppings(db.Model):
 #     db.__tablename__='pizza_toppings'
 #     pizza_id = db.Column(db.Integer, db.ForeignKey('pizza.pizza_id'), nullable=False)
 #     toppings_id = db.Column(db.Integer, db.ForeignKey('toppings.toppings_id'), nullable=False)
-
+#
 
 class Toppings(db.Model):
     db.__tablename__ = 'toppings'
@@ -121,17 +89,6 @@ class Toppings(db.Model):
         return f"Toppings:{self.toppings_name}, Price:{self.toppings_price}, Vegi?{self.toppings_vegi}"
 
 
-def save_new_toppings(name, price, vegi):
-    new_toppings = Toppings(toppings_name=name, toppings_price=price, toppings_vegi=vegi)
-    db.session.add(new_toppings)
-    db.session.commit()
-    return new_toppings
-
-
-def find_single_topping(**kwargs):
-    return Toppings.query.filter_by(**kwargs).first()
-
-
 class Drinks(db.Model):
     db.__tablename__='drinks'
     drinks_id = db.Column(db.Integer, primary_key=True)
@@ -140,19 +97,6 @@ class Drinks(db.Model):
 
     def __repr__(self):
         return f"Drinks:{self.drinks_name},Price:{self.drinks_price}"
-
-
-def save_new_drinks(name,price):
-    new_drinks = Drinks(drinks_name=name, drinks_price=price)
-    new_menu_item = Menu(drinks_id=new_drinks.id)
-    db.session.add(new_menu_item)
-    db.session.add(new_drinks)
-    db.session.commit()
-    return new_drinks
-
-
-def find_single_drinks(**kwargs):
-    return Drinks.query.filter_by(**kwargs).first()
 
 
 class Dessert(db.Model):
@@ -165,19 +109,6 @@ class Dessert(db.Model):
         return f"Dessert:{self.dessert_name},Price:{self.dessert_price}"
 
 
-def save_new_desserts(name,price):
-    new_desserts = Dessert(dessert_name=name, dessert_price=price)
-    new_menu_item = Menu(dessert_id=new_desserts.id)
-    db.session.add(new_menu_item)
-    db.session.add(new_desserts)
-    db.session.commit()
-    return new_desserts
-
-
-def find_single_dessert(**kwargs):
-    return Dessert.query.filter_by(**kwargs).first()
-
-
 class Delivery_Driver(db.Model):
     db.__tablename__='delivery_driver'
     delivery_driver_id = db.Column(db.Integer, primary_key=True)
@@ -188,20 +119,10 @@ class Delivery_Driver(db.Model):
         return f"Delivery driver name{self.delivery_driver_name}, delivered in this area{self.delivery_driver_area}"
 
 
-def save_new_delivery_driver(name,area):
-    new_delivery_driver = Delivery_Driver(delivery_driver_name=name, delivery_driver_area = area)
-    db.session.add(new_delivery_driver)
-    db.session.commit()
-    return new_delivery_driver
-
-
-def find_single_driver(**kwargs):
-    return Delivery_Driver.query.filter_by(**kwargs).first()
-
-
 driver_to_order_table = db.Table('driver_to_order',
-                                 db.Column('order_id', db.Integer, db.ForeignKey('order.order_id')),
-                                 db.Column('driver_id', db.Integer, db.ForeignKey('delivery_driver.delivery_driver_id')))
+                                 db.Column('order_id', db.Integer, db.ForeignKey('order.order_id'), primary_key=True),
+                                 db.Column('driver_id', db.Integer, db.ForeignKey('delivery_driver.delivery_driver_id'),
+                                           primary_key=True))
 
 # class Order_Delivery(db.Model):
 #     db.__tablename__='order_delivery'
@@ -222,10 +143,6 @@ class Menu(db.Model):
     # dessert = db.relationship('Dessert', backref=db.backref('menu', lazy=True))
 
 
-def find_single_menu(**kwargs):
-    return Menu.query.filter_by(**kwargs).first()
-
-
 class OrderEnum(enum.Enum):
     out_for_delivery = 1
     in_process = 2
@@ -244,26 +161,6 @@ class Order (db.Model):
     def __repr__(self):
         return f"Order {self.order_id}, came in at {self.placed}, currently {self.status}, " \
                f"discount applied {self.discount}, entered by {self.customer_id}"
-
-
-def find_single_order(**kwargs):
-    return Order.query.filter_by(**kwargs).first()
-
-
-def save_new_order(email, menu, discount):
-    customer = find_single_customer(email)
-    if customer is None:
-        return redirect('/customer.html')
-
-    new_order = Order(email=email, discount=discount, customer_id=customer.id, placed=datetime.utcnow)
-    db.session.add(new_order)
-    for i in range(1,len(menu)):
-        menu_item = find_single_menu(menu_id=menu[i])
-        # new_order_menu = Order_Menu(order_id=new_order.id, menu_id=menu_item.id)
-        # db.session.add(new_order_menu)
-
-    db.session.commit()
-    return new_order
 
 
 order_to_menu_table = db.Table('menu_to_order',

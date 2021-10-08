@@ -1,38 +1,41 @@
 import sys
-from flask import render_template, redirect, url_for, request, abortFlask, render_template, request, redirect, session
-from app import *
-import model.mysql_model
-from model.mysql_model import *
+from flask import render_template, redirect, url_for, request, render_template, request, redirect, session
+from app import page_not_found, pizza_missing, db
 from FormOrdering import OrderCreation
-from manage import *
 from flask_sqlalchemy import SQLAlchemy
+from ControllerMenu import find_single_menu
+from controller.CustomerController import find_single_customer
+from model.mysql_model import Order
 
-db = SQLAlchemy()
 
-@app.route('/order', methods=['POST'])
-def route_ordering():
-    if request.method == 'POST':
-        menu = request.form['pizzas'] + request.form['drinks'] + request.form['dessert']
-        customer = find_single_customer(email=request.form['email'])
-        new_order = save_new_order(email=request.form['email'],
-                                   menu=menu,
-                                   discount=customer.codeActive
-                                   )
-        return redirect('/order/<int:new_order.order_id>')
+def find_single_order(**kwargs):
+    return Order.query.filter_by(**kwargs).first()
+
+
+def save_new_order(email, menu, discount):
+    customer = find_single_customer(email=email)
+    if customer is None:
+        return redirect('/customer.html')
     else:
-        render_template("order.html", form=OrderCreation, title="Order")
-
-
-@app.route('/order/<order_id>', methods=['GET'])
-def route_order_id(order_id):
-    if request.method == 'GET':
-        order = find_single_order(order_id=order_id)
-        if order is None:
-            return redirect(page_not_found(DatabaseError))
+        order_menu = []
+        pizza_ordered = False
+        for i in range(1,len(menu)):
+            menu_item = find_single_menu(menu_id=menu[i])
+            if menu_item is None:
+                return page_not_found(Exception)
+            else:
+                if menu_item.pizza is not None:
+                    pizza_ordered = True
+                order_menu.append(menu_item)
+            # new_order_menu = Order_Menu(order_id=new_order.id, menu_id=menu_item.id)
+            # db.session.add(new_order_menu)
+        if pizza_ordered:
+            new_order = Order(email=email, discount=discount, customer_id=customer.id, placed=datetime.utcnow, menu=order_menu)
+            db.session.add(new_order)
+            db.session.commit()
+            return new_order
         else:
-            return render_template('order_id.html', order=order, title="Order")
-    else:
-        return redirect(page_not_found(PermissionError))
-        #404
+            return pizza_missing(Exception)
+
 
 
