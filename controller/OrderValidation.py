@@ -4,6 +4,7 @@ from app import db
 from controller.CustomerController import customer_id, customer
 from controller.FormCustomer import CustomerCreation
 from model.mysql_model import *
+from model.fill import *
 
 
 
@@ -19,19 +20,40 @@ def checkCustomerExist():
         return render_template("CreateCustomer.html", form=CustomerCreation)
 
 # check if they have a pizza in order
-#def pizzaExist():
-#  p = db.session.query(exists().where(in hte order there is a pizza)).scalar()
-#  if p:
-#     return redirect('/')
-#else:
-#   return redirect('/order')
+def pizzaExist():
+
+    p = db.session.query(exists(menu.pizza_id).where()).scalar()
+    if p:
+        return redirect('/')
+    else:
+        return redirect('/order')
+
 
 # A) add Driver
-#driver =...
-#driver only exists in the model, do we have to create
-# B) add to DB
+# check the address of the customer
+def addDriver():
+    code1 = address.code
 
-#db.session.add(driver)
-#db.session.commit()
+    area = int(str(code1)[:3])
 
-# show their order and Details connected (Order, Delivery Time, final Price, delivery  driver name/id)
+    if area == delivery_driver.delivery_driver_area:
+        driver1= Delivery_driver(Somename, area) # find a way to select a driver which is in the area, we don't care about the name
+        db.session.add(driver1)
+        db.session.commit()
+
+    else:
+        #continue looking for another driver
+
+
+#add driver to the order
+
+
+def Orderdetails():
+    driver_name = delivery_driver.delivery_driver_name
+    order_id = order.order_id
+    return 'Delivery driver name '+ driver_name + ', your order number is ' +order_id
+
+
+
+
+
