@@ -1,7 +1,6 @@
 import sys
 from flask import render_template, redirect, url_for, request, abortFlask, render_template, request, redirect, session
 from app import *
-import model.mysql_model
 from model.mysql_model import *
 from FormOrdering import OrderCreation
 from manage import *

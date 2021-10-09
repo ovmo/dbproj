@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import DatabaseError
-from flask_migrate import Migrate
 
 
 # from models.User import db
@@ -45,7 +44,7 @@ def special_exception_handler(error):
 
 
 db.init_app(app)
-migrate = Migrate(app, db)
+
 
 
 if __name__ == '__main__':

@@ -108,7 +108,7 @@ db.session.add(pana_cotta)
 db.session.add(tartufo)
 db.session.commit()
 
-#deliveryDrinvers
+#deliveryDrivers
 
 chiara = save_new_delivery_driver(name="Chiara", area=621)
 lou = save_new_delivery_driver(name="Lou", area=621)
