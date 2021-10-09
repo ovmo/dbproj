@@ -6,12 +6,10 @@ from db import app
 from controller.CustomerController import find_single_customer, save_new_costumer
 from controller.FormCustomer import CustomerCreation
 from controller.FormOrdering import OrderCreation
+from controller.ControllerMenu import get_all_pizzas, get_all_drinks, get_all_desserts
 from controller.OrderController import save_new_order, find_single_order
 # from model.mysql_model import Address, Customer, DeliveryDriver, Pizza, Toppings,
 # Drinks, Dessert, Menu, OrderEnum, Order
-
-
-
 
 
 @app.route('/', methods=['GET'])
@@ -25,7 +23,6 @@ def index():
 
 
 # Ordering routes
-
 @app.route('/order', methods=['POST', 'GET'])
 def route_ordering():
     form = OrderCreation('/order')
@@ -36,7 +33,12 @@ def route_ordering():
                                    menu=menu,
                                    discount=customer.codeActive)
         return redirect('/order/<int:new_order.order_id>')
-    return render_template("order.html", form=form, title="Order")
+    pizzas = get_all_pizzas()
+    for pizza in pizzas:
+        print(pizza.pizza_name)
+    drinks = get_all_drinks()
+    desserts = get_all_desserts()
+    return render_template("order.html", pizzaMenu=pizzas, drinksMenu=drinks, dessertMenu=desserts, title="Order")
 
 
 @app.route('/order/<order_id>', methods=['GET'])

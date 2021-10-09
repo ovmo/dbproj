@@ -1,5 +1,4 @@
 {% extends "skeleton.html" %}
-{% from FormCustomer import CustomerCreation %}
 
 {% block content %}
 <div class="col-12">
@@ -11,46 +10,43 @@
         <form action="/" method="post" novalidate>
             {{ form.hidden_tag() }}
             <div class="row">
-                <div class="col-4">
+                <div class="col-4 p-3">
                     {{ form.email.label }}
                 </div>
-                <div class="col-8">
-                    {{ form.email(size=120) }}
+                <div class="col-8 p-3">
+                    {{ form.email(size=40) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">
+                <div class="col-4 p-3">
                     {{ form.street.label }}
                 </div>
-                <div class="col-4">
-                    {{ form.street(size=120) }}
+                <div class="col-4 p-3">
+                    {{ form.street(size=20) }}
                 </div>
-                <div class="col-2">
+                <div class="col-2 p-3 ">
                     {{ form.street_no.label }}
                 </div>
-                <div class="col-2">
+                <div class="col-2 p-3">
                     {{ form.street_no(size=5) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-2">
-                    {{ form.street_no(size=5) }}
-                </div>
-                <div class="col-2">
+                <div class="col-2 p-3">
                     {{ form.area_code.label }}
                 </div>
-                <div class="col-2">
+                <div class="col-2 p-3">
                     {{ form.area_code(size=7) }}
                 </div>
-                <div class="col-4">
+                <div class="col-4 p-3">
                     {{ form.city.label }}
                 </div>
-                <div class="col-4">
-                    {{ form.city(size=40) }}
+                <div class="col-4 p-3">
+                    {{ form.city(size=20) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 p-3">
                     <div class="mx-auto" style="width: 200px;">
                         {{ form.submit }}
                     </div>

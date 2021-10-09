@@ -1,6 +1,6 @@
 {% extends "skeleton.html" %}
 
-{% from controller.MenuController import find_singe_pizza %}
+{#{% from controller.MenuController import find_singe_pizza, find_all_toppings, find_single_dessert, find_single_drink %}#}
 {% block content %}
 <div class="col-12">
     <div class="mx-auto" style="width: 300px;">
@@ -9,67 +9,97 @@
     <hr>
     <div class="row">
     <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <div class="col-4">
-            {{ form.email.label }}
-            <br>
-            <p class="font-weight-lighter">
-                Please enter your email so you can get nice rewards. and we know where to order it to.
-            </p>
+        <div class="row">
+            <div class="col-4">
+                <label class="font-weight-bold" for="email">
+                    Email
+                </label>
+                <br>
+                <p class="font-weight-lighter text-muted">
+                    Please enter your email so you can get nice rewards.
+                    <br>
+                    And we know where to send your Order to.
+                </p>
+            </div>
+            <div class="col-8">
+                <input type="text" class="form-control" id="email">
+            </div>
         </div>
-        <div class="col-8">
-            {{ form.email(size=120) }}
-        </div>
-
-            {% for item in form.menu_field_list %}
-                <div class="col-4">
-                    <p class="font-weight-bold">
-                        {{ item.label }}
-                        {% pizza = model.mysql_model.find_single_pizza(name=item.label %} }
-                    </p>
-{#                    <br>#}
-                    <div class="mx-auto" style="width: 50px;">
-                        {{ item }}
-                    </div>
-                </div>
-
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mx-auto" style="width: 200px;">Pizzas</h2>
+            </div>
+            {% for pizza in pizzaMenu %}
                 <div class="card col-4">
                     <div class="card-body">
-                        <h5 class="card-title">{{ item.label}}</h5>
-                        {% mysql_model. %} }
-                        <p class="card-text">{% mysql_model.find_single_pizza %}</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <h5 class="card-title">Pizza {{ pizza.pizza_name }}</h5>
+                        <p class="card-text">
+{#                            {% basePrice = 0 %}#}
+                            {% for topping in pizza.toppings %}
+                                {{ topping.toppings_name }},
+{#                                {{ basePrice = basePrice + topping.toppings_price }}#}
+                            {% endfor %}
+                        </p>
+                        <p class="font-weight-bold">
+{#                            €{{ "%.2f" % (((basePrice/6) * 10 ) * 1.09) }}#}
+{#                            €{{ "%.2f" % (((pizza.toppings.price/6) * 10 ) * 1.09) }}#}
+                            €{{ "%.2f" % (((pizza.pizza_id/6) * 10 ) * 1.09) }}
+                        </p>
+                        <div class="mx-auto" style="width: 250px;">
+                            <input type="number" class="form-control" id="{{ pizza.pizza_name }}" name="{{ pizza.pizza_name }}">
+                        </div>
                     </div>
                 </div>
-
             {% endfor %}
-        <div class="col-4">
-            {{ form.street(size=120) }}
         </div>
-        <div class="col-2">
-            {{ form.street_no.label }}
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mx-auto" style="width: 200px;">Drinks</h2>
+            </div>
+            {% for drink in drinksMenu %}
+                <div class="card col-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ drink.drinks_name}}</h5>
+                        <p class="card-text">
+                            € {{ "%.2f" % drink.drinks_price }}
+                        </p>
+                        <div class="mx-auto" style="width: 250px;">
+                            <input type="number" class="form-control" id="{{ drink.drinks_name }}" name="{{ drink.drinks_name }}">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        <div class="col-2">
-            {{ form.street_no(size=5) }}
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mx-auto" style="width: 200px">Dessert</h2>
+            </div>
+            {% for dessert in dessertMenu %}
+                <div class="card col-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ dessert.dessert_name}}</h5>
+                        <p class="card-text">
+                            € {{ "%.2f" % dessert.dessert_price }}
+                        </p>
+                        <div class="mx-auto" style="width: 250px;">
+                            <input type="number" class="form-control" id="{{ dessert.dessert_name }}" name="{{ dessert.dessert_name }}">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
         </div>
-        <div class="col-2">
-            {{ form.street_no(size=5) }}
-        </div>
-        <div class="col-2">
-            {{ form.area_code.label }}
-        </div>
-        <div class="col-2">
-            {{ form.area_code(size=7) }}
-        </div>
-        <div class="col-4">
-            {{ form.city.label }}
-        </div>
-        <div class="col-4">
-            {{ form.city(size=40) }}
+        <div class="row">
+            <div class="col-12">
+                <div class="mx-auto pt-3" style="width: 200px;">
+                    <input type="submit" value="Order Now" class="btn btn-outline-success">
+                </div>
+            </div>
         </div>
     </form>
 
     </div>
+<div style="height: 100px; width: 100px;"></div>
 </div>
 
 {% endblock %}
