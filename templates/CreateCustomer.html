@@ -7,48 +7,48 @@
     </div>
     <hr>
     <div class="row">
-        <form action="/" method="post" novalidate>
-            {{ form.hidden_tag() }}
+        <form action="/customer" method="post" novalidate>
+
             <div class="row">
                 <div class="col-4 p-3">
-                    {{ form.email.label }}
+                    <label for="email">Email</label>
                 </div>
                 <div class="col-8 p-3">
-                    {{ form.email(size=40) }}
+                    <input type="email" id="email" name="email" class="form-control" maxlength="120" required="true">
                 </div>
             </div>
             <div class="row">
                 <div class="col-4 p-3">
-                    {{ form.street.label }}
+                    <label for="street">Street</label>
                 </div>
                 <div class="col-4 p-3">
-                    {{ form.street(size=20) }}
+                    <input type="text" id="street" name="street" class="form-control" maxlength="120" required="true">
                 </div>
                 <div class="col-2 p-3 ">
-                    {{ form.street_no.label }}
+                    <label for="street_no">Street Number</label>
                 </div>
                 <div class="col-2 p-3">
-                    {{ form.street_no(size=5) }}
+                    <input type="text" id="street_no" name="street_no" class="form-control" maxlength="5" required="true">
                 </div>
             </div>
             <div class="row">
                 <div class="col-2 p-3">
-                    {{ form.area_code.label }}
+                    <label for="postal_code">Postal Code</label>
                 </div>
                 <div class="col-2 p-3">
-                    {{ form.area_code(size=7) }}
+                    <input type="text" id="postal_code" name="postal_code" class="form-control" maxlength="7" required="true">
                 </div>
                 <div class="col-4 p-3">
-                    {{ form.city.label }}
+                    <label for="city">City</label>
                 </div>
                 <div class="col-4 p-3">
-                    {{ form.city(size=20) }}
+                    <input type="text" id="city" name="city" class="form-control" maxlength="40" required="true">
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 p-3">
                     <div class="mx-auto" style="width: 200px;">
-                        {{ form.submit }}
+                        <input type="submit" id="submit" name="street" class="btn btn-outline-success" value="Create Account">
                     </div>
                 </div>
             </div>

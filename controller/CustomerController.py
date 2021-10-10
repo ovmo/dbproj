@@ -20,8 +20,9 @@ def find_single_customer(**kwargs):
 
 
 def save_new_costumer(email, street, street_no, code, city):
-    new_address = save_new_address(street, street_no, code, city)
+    new_address = save_new_address(street=street, street_no=street_no, code=code, city=city)
     new_customer = Customer(email=email, address=new_address)
+    print(new_customer)
     if new_customer.email != "":
         db.session.add(new_customer)
         db.session.commit()

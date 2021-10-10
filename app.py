@@ -6,8 +6,10 @@ from db import app
 from controller.CustomerController import find_single_customer, save_new_costumer
 from controller.FormCustomer import CustomerCreation
 from controller.FormOrdering import OrderCreation
-from controller.ControllerMenu import get_all_pizzas, get_all_drinks, get_all_desserts
-from controller.OrderController import save_new_order, find_single_order
+from controller.ControllerMenu import get_all_pizzas, get_all_drinks, get_all_desserts, find_single_menu
+from controller.OrderController import save_new_order, find_single_order, orderProcessing
+
+
 # from model.mysql_model import Address, Customer, DeliveryDriver, Pizza, Toppings,
 # Drinks, Dessert, Menu, OrderEnum, Order
 
@@ -25,20 +27,29 @@ def index():
 # Ordering routes
 @app.route('/order', methods=['POST', 'GET'])
 def route_ordering():
-    form = OrderCreation('/order')
     if request.method == 'POST':
-        menu = request.form['pizzas'] + request.form['drinks'] + request.form['dessert']
-        customer = find_single_customer(email=request.form['email'])
-        new_order = save_new_order(email=request.form['email'],
-                                   menu=menu,
-                                   discount=customer.codeActive)
-        return redirect('/order/<int:new_order.order_id>')
+        orderProcessing(request.form)
+        # menu = []
+        # form =
+        # for i in range(len(form)):
+        #     if i != 1:
+        #         if form[i][1] != 0:
+        #             menu.append(find_single_menu())
+        # customer = find_single_customer(email=form['email'])
+        # new_order = save_new_order(email=form['email'],
+        #                            menu=menu,
+        #                            discount=customer.codeActive)
+        # return redirect('/order/<int:new_order.order_id>')
     pizzas = get_all_pizzas()
+    pizzaPrices = []
     for pizza in pizzas:
-        print(pizza.pizza_name)
+        pizzaPrice = 0
+        for topping in pizza.toppings:
+            pizzaPrice += topping.toppings_price
+        pizzaPrices.append((pizzaPrice/0.6) * 1.09)
     drinks = get_all_drinks()
     desserts = get_all_desserts()
-    return render_template("order.html", pizzaMenu=pizzas, drinksMenu=drinks, dessertMenu=desserts, title="Order")
+    return render_template("order.html", pizzaMenu=pizzas, drinksMenu=drinks, dessertMenu=desserts, pizzaMenuPrices=pizzaPrices, title="Order")
 
 
 @app.route('/order/<order_id>', methods=['GET'])
@@ -56,31 +67,30 @@ def route_order_id(order_id):
 
 @app.route('/customer', methods=['GET', 'POST'])
 def customer():
-    form = CustomerCreation("/customer")
+    print(request)
     if request.method == "POST":
-        customer_found = save_new_costumer(email=request.form['email'],
-                                           street=request.form['street'],
-                                           street_no=request.form['street_no'],
-                                           code=request.form['postal_code'],
-                                           city=request.form['city'])
+        print(request.form)
+        new_customer = save_new_costumer(email=request.form['email'],
+                                         street=request.form['street'],
+                                         street_no=request.form['street_no'],
+                                         code=request.form['postal_code'],
+                                         city=request.form['city'])
         return redirect('/order')
     else:
+        return render_template("CreateCustomer.html")
 
-        return render_template("CreateCustomer.html", form=form)
 
-
-@app.route('/customer/<int:customer_id>', methods=['GET'])
-def customer_id(customer_id):
-    if request.method == 'GET':
-        customer_found = find_single_customer(customer_id=customer_id)
-        if customer_found is None:
-            return redirect(special_exception_handler(Exception))
-        else:
-            return render_template('CustomerID.html', customer=customer_found)
-    else:
-        # 404
-        return redirect(page_not_found(PermissionError))
-
+# @app.route('/customer/<int:customer_id>', methods=['GET'])
+# def customer_id(customer_id):
+#     if request.method == 'GET':
+#         customer_found = find_single_customer(customer_id=customer_id)
+#         if customer_found is None:
+#             return redirect(special_exception_handler(Exception))
+#         else:
+#             return render_template('CustomerID.html', customer=customer_found)
+#     else:
+#         # 404
+#         return redirect(page_not_found(PermissionError))
 
 
 @app.errorhandler(404)

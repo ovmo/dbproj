@@ -8,7 +8,7 @@
     </div>
     <hr>
     <div class="row">
-    <form action="" method="post" novalidate>
+    <form action="" method="post">
         <div class="row">
             <div class="col-4">
                 <label class="font-weight-bold" for="email">
@@ -22,7 +22,7 @@
                 </p>
             </div>
             <div class="col-8">
-                <input type="text" class="form-control" id="email">
+                <input type="email" class="form-control" id="email" name="email" required="true">
             </div>
         </div>
         <div class="row">
@@ -30,23 +30,21 @@
                 <h2 class="mx-auto" style="width: 200px;">Pizzas</h2>
             </div>
             {% for pizza in pizzaMenu %}
-                <div class="card col-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Pizza {{ pizza.pizza_name }}</h5>
-                        <p class="card-text">
-{#                            {% basePrice = 0 %}#}
-                            {% for topping in pizza.toppings %}
-                                {{ topping.toppings_name }},
-{#                                {{ basePrice = basePrice + topping.toppings_price }}#}
-                            {% endfor %}
-                        </p>
-                        <p class="font-weight-bold">
-{#                            €{{ "%.2f" % (((basePrice/6) * 10 ) * 1.09) }}#}
-{#                            €{{ "%.2f" % (((pizza.toppings.price/6) * 10 ) * 1.09) }}#}
-                            €{{ "%.2f" % (((pizza.pizza_id/6) * 10 ) * 1.09) }}
-                        </p>
-                        <div class="mx-auto" style="width: 250px;">
-                            <input type="number" class="form-control" id="{{ pizza.pizza_name }}" name="{{ pizza.pizza_name }}">
+                <div class="col-4 p-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Pizza {{ pizza.pizza_name }}</h5>
+                            <p class="card-text">
+                                {% for topping in pizza.toppings %}
+                                    {{ topping.toppings_name }},
+                                {% endfor %}
+                            </p>
+                            <p class="font-weight-bold">
+                                €{{ "%.2f" % (pizzaMenuPrices[(pizza.pizza_id - 1)]) }}
+                            </p>
+                            <div class="mx-auto" style="width: 250px;">
+                                <input type="number" class="form-control" id="{{ pizza.menu[0].menu_id }}" name="{{ pizza.menu[0].menu_id }}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,14 +55,16 @@
                 <h2 class="mx-auto" style="width: 200px;">Drinks</h2>
             </div>
             {% for drink in drinksMenu %}
-                <div class="card col-4">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ drink.drinks_name}}</h5>
-                        <p class="card-text">
-                            € {{ "%.2f" % drink.drinks_price }}
-                        </p>
-                        <div class="mx-auto" style="width: 250px;">
-                            <input type="number" class="form-control" id="{{ drink.drinks_name }}" name="{{ drink.drinks_name }}">
+                <div class="col-4 p-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ drink.drinks_name}}</h5>
+                            <p class="card-text">
+                                € {{ "%.2f" % drink.drinks_price }}
+                            </p>
+                            <div class="mx-auto" style="width: 250px;">
+                                <input type="number" class="form-control" id="{{ drink.menu[0].menu_id }}" name="{{ drink.menu[0].menu_id }}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,14 +75,16 @@
                 <h2 class="mx-auto" style="width: 200px">Dessert</h2>
             </div>
             {% for dessert in dessertMenu %}
-                <div class="card col-4">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ dessert.dessert_name}}</h5>
-                        <p class="card-text">
-                            € {{ "%.2f" % dessert.dessert_price }}
-                        </p>
-                        <div class="mx-auto" style="width: 250px;">
-                            <input type="number" class="form-control" id="{{ dessert.dessert_name }}" name="{{ dessert.dessert_name }}">
+                <div class="col-4 p-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ dessert.dessert_name}}</h5>
+                            <p class="card-text">
+                                € {{ "%.2f" % dessert.dessert_price }}
+                            </p>
+                            <div class="mx-auto" style="width: 250px;">
+                                <input type="number" class="form-control" id="{{ dessert.menu[0].menu_id }}" name="{{ dessert.menu[0].menu_id }}">
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -30,7 +30,7 @@ class Customer(db.Model):
     order = db.relationship('Order', back_populates='customer', cascade="all, delete")
 
     def __repr__(self):
-        return f"User {self.email}"
+        return f"Customer {self.email}"
 
 
 pizza_to_toppings = db.Table('pizza_to_toppings',
@@ -131,7 +131,7 @@ class Order (db.Model):
     status = db.Column(db.Enum(OrderEnum), nullable=False)
     placed = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     discount = db.Column(db.Boolean)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'))
     driver_id = db.Column(db.Integer, db.ForeignKey('delivery_driver.delivery_driver_id'))
     customer = db.relationship('Customer', back_populates='order', cascade="all, delete")
     delivery_driver = db.relationship('DeliveryDriver', back_populates='order', cascade="all, delete")
