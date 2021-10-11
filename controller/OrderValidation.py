@@ -9,54 +9,32 @@ import timeit
 from controller.DriverController import *
 
 
-
-
-# q = session.query(Customer.id).filter(Customer.email==email)
-# #session.query(q.exists()).scalar()    # returns True or False
-
-#check if the customer exist in the database
-def checkCustomerExist():
+def check_customer_exist():
     c = db.session.query(exists().where(customer.id == customer_id)).scalar()
     if c:
         return redirect('/')
     else:
         return render_template("CreateCustomer.html", form=CustomerCreation)
 
-# check if they have a pizza in order
-def pizzaExist():
 
-    p = db.session.query(exists(menu.pizza_id).where()).scalar()
+# check if they have a pizza in order
+def pizza_exist():
+    p = db.session.query(exists(menu.pizza_id).where(pizza.id == pizza_id)).scalar()
     return p
 
 
-
-def needDriver():
-    code1 = address.code
-    area = int(str(code1)[:3])
-    for i in range(1,len(drivers)): # drivers is the list created in the fill file
+def need_driver():
+    drivers = get_all_drivers
+    for delivery_driver in drivers:
+        timenow = datetime.utcnow()
+        orderplaced = delivery_driver.orders[-1].placed
+        f = (orderplaced - timenow).seconds/60
         drivers[i] = find_single_driver(delivery_driver.delivery_driver_area)
-        if area == drivers[i]:
+        if (drivers[i] == delivery_driver.area) & (f >= 35):
             return drivers[i]
 
 
-def Orderdetails():
+def orderdetails():
     driver_name = delivery_driver.delivery_driver_name
     order_id = order.order_id
-    return 'Delivery driver name '+ driver_name + ', your order number is ' +order_id
-
-
-
-# find a way to see if a driver is available ? Timing system?
-# Maybe : start the time counting when a driver is found. Then calculate the time and when th time is at 35 minutes, the driver is free again
-# start = timeit.timeit()
-# end = timeit.timeit()
-# print(end - start) # total time taken
-
-
-
-
-
-
-
-
-
+    return 'Delivery driver name ' + driver_name + ', your order number is ' + order_id
