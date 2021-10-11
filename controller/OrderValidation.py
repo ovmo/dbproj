@@ -5,7 +5,7 @@ from controller.CustomerController import customer_id, customer
 from controller.FormCustomer import CustomerCreation
 from model.mysql_model import *
 from model.fill import *
-
+import timeit
 
 
 # q = session.query(Customer.id).filter(Customer.email==email)
@@ -23,14 +23,10 @@ def checkCustomerExist():
 def pizzaExist():
 
     p = db.session.query(exists(menu.pizza_id).where()).scalar()
-    if p:
-        return redirect('/')
-    else:
-        return redirect('/order')
+    return p
 
 
-# A) add Driver
-# check the address of the customer
+
 def addDriver():
     code1 = address.code
 
@@ -40,12 +36,19 @@ def addDriver():
         driver1= Delivery_driver(Somename, area) # find a way to select a driver which is in the area, we don't care about the name
         db.session.add(driver1)
         db.session.commit()
+        #find a way to see if a driver is available ? Timing system?
+        # maybe use the OrderEnum class for the state of the order
+
+        start = timeit.timeit()
+        #add action to driver a calculate if the driver is available
+        end = timeit.timeit()
+        print(end - start) # total time taken
 
     else:
         #continue looking for another driver
 
 
-#add driver to the order
+
 
 
 def Orderdetails():
