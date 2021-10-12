@@ -1,6 +1,55 @@
 {% extends "skeleton.html" %}
 
 {% block content %}
-
+    <div class="row">
+        <div class="col-12">
+            <div class="mx-auto" style="width: 300px;">
+                <h1>Order {{ order.order_id }}</h1>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    {% for item in menu %}
+                    <p>
+{#                        {% for counting in orderCount %}#}
+{#                            {% if counting.menu_id == item.menu_id %}#}
+{#                                {{ counting.count }}#}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
+                        {% if item.pizza != None %}
+                            1x Pizza {{ item.pizza.pizza_name }} - €{{ "%.2f" % pizzaPrices[item.pizza.pizza_id] }}
+                        {% endif %}
+                        {% if item.dessert != None %}
+                            1x {{ item.dessert.dessert_name }} - €{{ "%.2f" % item.dessert.dessert_price }}
+                        {% endif %}
+                        {% if item.drinks != None %}
+                            1x {{ item.drinks.drinks_name }} - €{{ "%.2f" % item.drinks.drinks_price }}
+                        {% endif %}
+                     </p>
+                     {% endfor %}
+                </div>
+                <div class="col-6">
+                    <p>
+                        Your Order is
+                        {{ status }}
+                        <br>
+                        {{ customer.email }}
+                        <br>
+                        {{ customer.address.street }} {{ customer.address.street_no }}
+                        <br>
+                        {{ customer.address.code }} {{ customer.address.city }}
+                    </p>
+                </div>
+                {% if status == 'in Process' %}
+                    <div class="row">
+                        <form action="" method="post">
+                            <div class="mx-auto" style="width: 100px;">
+                                <input type="submit" value="Cancel Order" class="btn btn-outline-danger">
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

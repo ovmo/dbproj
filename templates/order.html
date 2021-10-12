@@ -38,6 +38,10 @@
                                 {% for topping in pizza.toppings %}
                                     {{ topping.toppings_name }},
                                 {% endfor %}
+{#                                {% if pizzaMenuVegi[(pizza.pizza_id - 1)] %}#}
+{#                                    <br>#}
+{#                                    Vegetarian#}
+{#                                {% endif %}#}
                             </p>
                             <p class="font-weight-bold">
                                 €{{ "%.2f" % (pizzaMenuPrices[(pizza.pizza_id - 1)]) }}

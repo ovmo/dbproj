@@ -40,6 +40,17 @@
 #     db.session.commit()
 #     return new_pizza
 
+# order_to_menu_table = db.Table('menu_to_order',
+#                                db.Column('order_id', db.Integer, db.ForeignKey('order.order_id')),
+#                                db.Column('menu_id', db.Integer, db.ForeignKey('menu.menu_id')),
+#                                db.Column('count', db.Integer, default=1))
+
+# class Order_Menu(db.Model):
+#     db.__tablename__='order_menu'
+#     menu_id = db.Column(db.Integer, db.ForeignKey('menu.menu_id'),nullable=False)
+#     order_id = db.Column(db.Integer, db.ForeignKey('order.order_id'),nullable=False)
+#     order = db.relationship('Order', backref=db.backref('order_menu', lazy=True))
+#     menu = db.relationship('Menu', backref=db.backref('order_menu', lazy=True))
 
 
 # class Pizza_Toppings(db.Model):

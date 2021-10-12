@@ -13,3 +13,6 @@ def find_single_driver(**kwargs):
     return DeliveryDriver.query.filter_by(**kwargs).first()
 
 
+def get_all_drivers():
+    return DeliveryDriver.query.all()
+

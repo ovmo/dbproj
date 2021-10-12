@@ -50,7 +50,6 @@ class Pizza(db.Model):
     toppings = db.relationship('Toppings', back_populates="pizza", lazy='dynamic', secondary='pizza_to_toppings', cascade="all, delete")
     menu = db.relationship('Menu', back_populates='pizza', cascade="all, delete")
 
-
     def __repr__(self):
         return f"Pizza {self.pizza_name}, Toppings: {self.toppings}"
 
@@ -100,6 +99,14 @@ class DeliveryDriver(db.Model):
         return f"Delivery driver name{self.delivery_driver_name}, delivered in this area{self.delivery_driver_area}"
 
 
+# class OrderToMenu(db.Model):
+#     db.__tablename__='menu_to_order'
+#     menu_id = db.Column(db.Integer, db.ForeignKey('menu.menu_id'))
+#     order_id = db.Column(db.Integer, db.ForeignKey('order.order_id'))
+#     count = db.Column(db.Integer, default=1)
+#     order = db.relationship('Order', back_populates='menu_to_order', cascade="all, delete")
+#     menu = db.relationship('Menu', back_populates='menu_to_order', cascade="all, delete")
+
 order_to_menu_table = db.Table('menu_to_order',
                                db.Column('order_id', db.Integer, db.ForeignKey('order.order_id')),
                                db.Column('menu_id', db.Integer, db.ForeignKey('menu.menu_id')),
@@ -116,7 +123,7 @@ class Menu(db.Model):
     pizza = relationship("Pizza", back_populates="menu", cascade="all, delete")
     drinks = relationship("Drinks", back_populates="menu", cascade="all, delete")
     dessert = relationship("Dessert", back_populates="menu", cascade="all, delete")
-
+    # order_menu = relationship("menu_to_order", back_populates='menu', cascade="all, delete")
 
 
 class OrderEnum(enum.Enum):
@@ -129,31 +136,22 @@ class Order (db.Model):
     db.__tablename__ = 'order'
     order_id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.Enum(OrderEnum), nullable=False)
-    placed = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    placed = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     discount = db.Column(db.Boolean)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.customer_id'))
     driver_id = db.Column(db.Integer, db.ForeignKey('delivery_driver.delivery_driver_id'))
     customer = db.relationship('Customer', back_populates='order', cascade="all, delete")
     delivery_driver = db.relationship('DeliveryDriver', back_populates='order', cascade="all, delete")
     menu = relationship("Menu", back_populates="order", lazy='dynamic', secondary=order_to_menu_table, cascade="all, delete")
+    # order_menu = relationship("menu_to_order", back_populates='order', cascade="all, delete")
 
     def __repr__(self):
         return f"Order {self.order_id}, came in at {self.placed}, currently {self.status}, " \
                f"discount applied {self.discount}, entered by {self.customer_id}"
 
 
-
-# class Order_Menu(db.Model):
-#     db.__tablename__='order_menu'
-#     menu_id = db.Column(db.Integer, db.ForeignKey('menu.menu_id'),nullable=False)
-#     order_id = db.Column(db.Integer, db.ForeignKey('order.order_id'),nullable=False)
-#     order = db.relationship('Order', backref=db.backref('order_menu', lazy=True))
-#     menu = db.relationship('Menu', backref=db.backref('order_menu', lazy=True))
-
-
 db.drop_all()
 db.create_all()
-
 
 from model.fill import *
 fillDB()
